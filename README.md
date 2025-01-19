@@ -1,6 +1,6 @@
 # Particle Swarm Optimizer
 
-A multivariate Particle Swarm Optimizer. Multicore CPU. Pure C#, no dependencies, no binaries.
+A multivariate Particle Swarm Optimizer. Multicore CPU. Pure C#, no binaries. No dependencies except for Microsoft's unit testing.
 
 ## What is PSO?
 Particle Swarm Optimization (PSO) is a population-based metaheuristic optimization algorithm inspired by the social behavior of birds flocking or fish schooling. It is useful for finding the minimum (or maximum) of functions without relying on gradient information. Each candidate solution (called a “particle”) moves through the search space influenced by:
