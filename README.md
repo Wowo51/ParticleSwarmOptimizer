@@ -1,4 +1,3 @@
-<MarkDown>
 # Particle Swarm Optimizer
 
 A multivariate Particle Swarm Optimizer. Multicore CPU. Pure C#, no dependencies, no binaries.
@@ -67,4 +66,3 @@ Particles thereby “swarm” around optimal or near-optimal solutions. PSO exce
 Copyright [TranscendAI.tech](https://TranscendAI.tech) 2025.
 <br>
 Authored by Warren Harding. AI assisted.</br>
-</MarkDown>
