@@ -6,7 +6,7 @@ Version 1.0
 You are granted the right to use, modify, and distribute the source code for non-commercial purposes.
 
 **Testing**  
-You may test the source code in for-profit environments without restrictions.
+You may test the source code in for-profit environments without restrictions. You must purchase a commercial use license before distributing the source code in any way in a purchasable product.
 
 **Attribution**  
 If you use the source code publicly or incorporate it into a public product, you must provide appropriate attribution to TranscendAI.tech.
