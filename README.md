@@ -2,67 +2,70 @@
 
 A multivariate Particle Swarm Optimizer. Multicore CPU. Pure C#, no dependencies, no binaries.
 
-## What is Particle Swarm Optimization?
+## What is PSO?
+Particle Swarm Optimization (PSO) is a population-based metaheuristic optimization algorithm inspired by the social behavior of birds flocking or fish schooling. It is useful for finding the minimum (or maximum) of functions without relying on gradient information. Each candidate solution (called a “particle”) moves through the search space influenced by:
+1. Its own best-known position.
+2. The global best-known position found by any particle in the swarm.
 
-Particle Swarm Optimization (PSO) is a population-based stochastic optimization technique inspired by the social behavior of birds or fish. In this method, a population (or *swarm*) of candidate solutions (called *particles*) simultaneously explores the search space. Each particle adjusts its trajectory based on:
-- Its personal best position found so far.
-- The best position discovered by the entire swarm (global best).
-
-Particles thereby “swarm” around optimal or near-optimal solutions. PSO excels at tackling continuous optimization problems and is often praised for its simplicity and relatively few tuning parameters.
+Over multiple iterations, the swarm “collaborates” to converge on an optimal solution.
 
 ## How to Use This Library
+This library provides a `ParticleSwarmOptimizer` class that implements `IOptimizer` from the `OptimizerInterface` project. Here’s how to integrate it into your .NET 9.0 C# application (without dependencies or external binaries):
 
-1. **Setup**  
-   - Include this library’s `.cs` file(s) in your project or reference the compiled assembly.  
-   - Import the relevant namespace in your C# files.
+1. **Include the Projects**:  
+   - `OptimizerInterface` (contains the `IOptimizer` interface, plus `OptimizationOptions` and `OptimizationResult` classes).  
+   - `ParticleSwarm` (contains the PSO implementation).
 
-2. **Define an Objective Function**  
-   - Provide a function that measures the quality (or cost) of any given set of parameters.  
-   - This function should return a numeric value indicating how good the solution is.
+2. **Configure Your Objective Function**:  
+   Prepare a function (or delegate) representing the problem you want to minimize.
 
-3. **Configure the Optimizer**  
-   - Specify the dimensionality of your problem (number of parameters).  
-   - Set the swarm size (number of particles).  
-   - Define the lower and upper search bounds for each dimension.  
-   - Adjust hyperparameters such as inertia weight, cognitive coefficient, and social coefficient.
+3. **Set an Initial Guess**:  
+   Provide a starting vector for the optimizer.
 
-4. **Run the Optimization**  
-   - Pass in the objective function and set the number of iterations or stopping criteria.  
-   - Each iteration, particles will update their positions and velocities according to both their personal best and the global best found by the swarm.
+4. **Adjust Optimization Options** (optional):  
+   Such as maximum iterations (`MaxIterations`), convergence tolerance (`Tolerance`), etc.
 
-5. **Retrieve the Results**  
-   - After execution completes, you can access the best position (the optimal parameter set) and its corresponding cost (the minimum value of the objective function).
+5. **Invoke PSO**:  
+   Create an instance of `ParticleSwarmOptimizer` and call its `Optimize` method, passing in your objective function, initial guess, and any options.
 
-6. **Multicore Execution**  
-   - The library is designed to utilize multiple CPU cores, which can expedite evaluations if your objective function is computationally heavy.
+6. **Retrieve Results**:  
+   The method returns an `OptimizationResult` containing the best solution found, the best objective value, the number of iterations used, and any remarks.
 
-## Customization and Advanced Settings
+## How It Works
+1. **Initialization**: A swarm of particles is placed randomly in the solution space. Each particle has a position, a velocity, and a memory of its best position so far.
+2. **Velocity Update**: Each particle’s velocity is recalculated based on:
+   - **Inertia**: Keeps the particle moving in its current direction.
+   - **Cognitive Component**: Pulls each particle toward its own best-known position.
+   - **Social Component**: Pulls each particle toward the global best-known position.
+3. **Position Update**: Particle positions are updated using the new velocities.
+4. **Best Tracking**: Each particle updates its personal best, and the algorithm updates the global best if any improvement is found.
+5. **Stopping Criteria**: The iteration loop ends if the maximum number of iterations is reached or the objective value is sufficiently low (within `Tolerance`).
 
-- **Inertia Weight**: Influences how much of a particle’s previous velocity is retained (balancing exploration vs. exploitation).  
-- **Cognitive Coefficient**: Determines how strongly a particle is pulled towards its personal best solution.  
-- **Social Coefficient**: Determines how strongly a particle is pulled towards the global best solution.  
-- **Boundary Conditions**: Decide what happens when particles move outside the defined search space (e.g., clamping or reflection).
+## Key Parameters
+- **Number of Particles (30 by default)**: Balances coverage of the search space and computational cost.
+- **Inertia (default = 0.7)**: Controls how much a particle continues in its current trajectory.
+- **Cognitive Component (default = 1.5)**: Strength of pulling a particle toward its personal best.
+- **Social Component (default = 1.5)**: Strength of pulling a particle toward the swarm’s best position.
+- **MaxIterations (default = 1000)**: The algorithm stops if this number is reached.
+- **Tolerance (default = 1e-6)**: If the best objective value is less than or equal to this threshold, the algorithm terminates.
 
-## When to Use PSO
+## Parallelization
+This library uses `Parallel.For` in the main loop, allowing each particle's update to run on a separate thread for faster performance on multi-core CPUs.
 
-- Useful for continuous optimization problems (though discrete variants exist).  
-- Straightforward to implement and requires minimal parameter tuning compared to many other methods.  
-- Suited for parallel evaluations, leveraging multiple CPU cores.  
-- Effective for both low-dimensional and moderately high-dimensional problems.
+## Customization
+- Adjust random initialization ranges in the source code of `ParticleSwarmOptimizer`.
+- Modify parameters like `numberOfParticles`, `inertia`, `cognitiveComponent`, and `socialComponent` for tuning performance.
+- Extend `OptimizationOptions` for features like custom seeds or logging.
 
-## Limitations
+## Testing
+The **ParticleSwarmTest** project provides MSTest-based unit tests verifying the optimizer on a known function. You can run or modify these tests to validate changes or new use cases.
 
-- May be computationally intensive if objective function evaluations are expensive.  
-- Sensitivity to parameter choices (e.g., swarm size, inertia, cognitive, social coefficients).  
-- Can converge prematurely in complex landscapes if not properly tuned.
-
-## Getting Help
-
-- Consult the library’s source code comments for further details.  
-- Contact the author for advanced use cases, additional features, or specialized stopping criteria.
+## Known Limitations
+- PSO does not guarantee a global optimum in all situations, though it often performs well in practice.
+- Currently tailored for minimization. Invert the objective function (multiply by -1) to handle maximization problems.
+- High-dimensional or very large problems may require additional optimizations.
 
 ![AI Image](aiimage.jpg)
 </br>
-Copyright [TranscendAI.tech](https://TranscendAI.tech) 2025.
-<br>
+Copyright [TranscendAI.tech](https://TranscendAI.tech) 2025.<br>
 Authored by Warren Harding. AI assisted.</br>
