@@ -68,5 +68,7 @@ The **ParticleSwarmTest** project provides MSTest-based unit tests verifying the
 ![AI Image](aiimage.jpg)
 </br>
 This code is free for non-commercial use. A commercial use license is $20 Canadian.</br>
+Make a purchase [here.](https://TranscendAI.tech/paylanding.html)</br>
+</br>
 Copyright [TranscendAI.tech](https://TranscendAI.tech) 2025.</br>
 Authored by Warren Harding. AI assisted.</br>
