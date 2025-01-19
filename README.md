@@ -1,121 +1,70 @@
+<MarkDown>
 # Particle Swarm Optimizer
 
 A multivariate Particle Swarm Optimizer. Multicore CPU. Pure C#, no dependencies, no binaries.
 
 ## What is Particle Swarm Optimization?
 
-Particle Swarm Optimization (PSO) is a population-based stochastic optimization technique inspired by the social behavior of birds or fish schools. Each individual in the population (called a *particle*) explores the search space, guided by:
-- Its own best position found so far (personal best).
-- The best position found so far by any particle in the population (global best).
+Particle Swarm Optimization (PSO) is a population-based stochastic optimization technique inspired by the social behavior of birds or fish. In this method, a population (or *swarm*) of candidate solutions (called *particles*) simultaneously explores the search space. Each particle adjusts its trajectory based on:
+- Its personal best position found so far.
+- The best position discovered by the entire swarm (global best).
 
-Over multiple iterations, particles accelerate toward these personal and global best positions, effectively “swarming” around optimal or near-optimal solutions. PSO is widely used for solving continuous optimization problems, and it has the advantages of simplicity, few parameters, and reasonable performance across diverse domains.
+Particles thereby “swarm” around optimal or near-optimal solutions. PSO excels at tackling continuous optimization problems and is often praised for its simplicity and relatively few tuning parameters.
 
 ## How to Use This Library
 
-This library provides a straightforward implementation of PSO in pure C#. Below is a general guide on how to integrate and use it:
+1. **Setup**  
+   - Include this library’s `.cs` file(s) in your project or reference the compiled assembly.  
+   - Import the relevant namespace in your C# files.
 
-1. **Reference the Library**  
-   - Include the `.cs` file(s) in your project or reference the compiled assembly.
-   - Import the namespace (e.g., `using ParticleSwarmOptimizer;`) where needed.
+2. **Define an Objective Function**  
+   - Provide a function that measures the quality (or cost) of any given set of parameters.  
+   - This function should return a numeric value indicating how good the solution is.
 
-2. **Define Your Objective Function**  
-   - PSO needs a function to evaluate the “fitness” or “cost” of a solution.
-   - This function must accept a vector of parameters (e.g., `double[] position`) and return a single scalar value representing the quality of that position.
-   - Example:
-     ```csharp
-     // Example objective function: Sphere function
-     double SphereFunction(double[] position)
-     {
-         double sum = 0.0;
-         foreach (var x in position)
-             sum += x * x;
-         return sum;
-     }
-     ```
-
-3. **Configure the PSO**  
-   - Set the number of particles, the boundaries for each dimension, and PSO-related parameters:
-     ```csharp
-     var pso = new ParticleSwarm(
-         dimension: 3,                     // Number of parameters
-         swarmSize: 30,                    // Number of particles
-         lowerBound: new double[] {-10, -10, -10},
-         upperBound: new double[] {10, 10, 10}
-     );
-     
-     pso.InertiaWeight = 0.7;             // Typical range: [0.5, 1.0]
-     pso.CognitiveCoefficient = 1.5;      // Typical range: [1.0, 2.0]
-     pso.SocialCoefficient = 1.5;         // Typical range: [1.0, 2.0]
-     ```
+3. **Configure the Optimizer**  
+   - Specify the dimensionality of your problem (number of parameters).  
+   - Set the swarm size (number of particles).  
+   - Define the lower and upper search bounds for each dimension.  
+   - Adjust hyperparameters such as inertia weight, cognitive coefficient, and social coefficient.
 
 4. **Run the Optimization**  
-   - Provide the objective function and run for a specified number of iterations (or until convergence):
-     ```csharp
-     pso.Optimize(SphereFunction, iterations: 1000);
-     ```
+   - Pass in the objective function and set the number of iterations or stopping criteria.  
+   - Each iteration, particles will update their positions and velocities according to both their personal best and the global best found by the swarm.
 
 5. **Retrieve the Results**  
-   - After optimization, query the best-found position and its cost:
-     ```csharp
-     double[] bestSolution = pso.BestPosition;
-     double bestCost = pso.BestCost;
-     Console.WriteLine("Best Position: " + string.Join(",", bestSolution));
-     Console.WriteLine("Best Cost: " + bestCost);
-     ```
+   - After execution completes, you can access the best position (the optimal parameter set) and its corresponding cost (the minimum value of the objective function).
 
-6. **Multicore Capability**  
-   - The library can leverage multiple CPU cores. It may do this automatically or provide configuration options.
+6. **Multicore Execution**  
+   - The library is designed to utilize multiple CPU cores, which can expedite evaluations if your objective function is computationally heavy.
 
-## Example Usage
+## Customization and Advanced Settings
 
-Below is a minimal example demonstrating typical usage:
+- **Inertia Weight**: Influences how much of a particle’s previous velocity is retained (balancing exploration vs. exploitation).  
+- **Cognitive Coefficient**: Determines how strongly a particle is pulled towards its personal best solution.  
+- **Social Coefficient**: Determines how strongly a particle is pulled towards the global best solution.  
+- **Boundary Conditions**: Decide what happens when particles move outside the defined search space (e.g., clamping or reflection).
 
-```csharp
-using System;
+## When to Use PSO
 
-namespace PSOExample
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            // Objective function for demonstration (Sphere)
-            double SphereFunction(double[] pos)
-            {
-                double sum = 0;
-                foreach (var x in pos)
-                    sum += x * x;
-                return sum;
-            }
+- Useful for continuous optimization problems (though discrete variants exist).  
+- Straightforward to implement and requires minimal parameter tuning compared to many other methods.  
+- Suited for parallel evaluations, leveraging multiple CPU cores.  
+- Effective for both low-dimensional and moderately high-dimensional problems.
 
-            // Create a PSO instance for a 3-dimensional problem
-            var pso = new ParticleSwarm(
-                dimension: 3,
-                swarmSize: 30,
-                lowerBound: new double[] {-5, -5, -5},
-                upperBound: new double[] {5, 5, 5}
-            );
+## Limitations
 
-            // Optionally adjust PSO parameters
-            pso.InertiaWeight = 0.7;
-            pso.CognitiveCoefficient = 1.4;
-            pso.SocialCoefficient = 1.4;
+- May be computationally intensive if objective function evaluations are expensive.  
+- Sensitivity to parameter choices (e.g., swarm size, inertia, cognitive, social coefficients).  
+- Can converge prematurely in complex landscapes if not properly tuned.
 
-            // Run the optimization
-            pso.Optimize(SphereFunction, iterations: 500);
+## Getting Help
 
-            // Retrieve the results
-            Console.WriteLine("Best position found:");
-            Console.WriteLine(string.Join(",", pso.BestPosition));
-            Console.WriteLine("Cost at best position:");
-            Console.WriteLine(pso.BestCost);
-        }
-    }
-}
+- Consult the library’s source code comments for further details.  
+- Contact the author for advanced use cases, additional features, or specialized stopping criteria.
 
-```
 ![AI Image](aiimage.jpg)
 </br>
-Copyright [TranscendAI.tech](https://TranscendAI.tech) 2025.<br>
+Copyright [TranscendAI.tech](https://TranscendAI.tech) 2025.
+<br>
 Authored by Warren Harding. AI assisted.</br>
 </MarkDown>
