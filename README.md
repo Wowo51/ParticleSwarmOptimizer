@@ -2,6 +2,9 @@
 
 A multivariate Particle Swarm Optimizer. Multicore CPU. Pure C#, no binaries. No dependencies except for Microsoft's unit testing.
 
+This code is free for non-commercial use. A commercial use license is $5 Canadian.</br>
+Make a purchase [here.](https://TranscendAI.tech/paylanding.html)</br>
+
 ## What is PSO?
 Particle Swarm Optimization (PSO) is a population-based metaheuristic optimization algorithm inspired by the social behavior of birds flocking or fish schooling. It is useful for finding the minimum (or maximum) of functions without relying on gradient information. Each candidate solution (called a “particle”) moves through the search space influenced by:
 1. Its own best-known position.
@@ -66,9 +69,6 @@ The **ParticleSwarmTest** project provides MSTest-based unit tests verifying the
 - High-dimensional or very large problems may require additional optimizations.
 
 ![AI Image](aiimage.jpg)
-</br>
-This code is free for non-commercial use. A commercial use license is $20 Canadian.</br>
-Make a purchase [here.](https://TranscendAI.tech/paylanding.html)</br>
 </br>
 Copyright [TranscendAI.tech](https://TranscendAI.tech) 2025.</br>
 Authored by Warren Harding. AI assisted.</br>
